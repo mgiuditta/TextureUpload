@@ -35,6 +35,13 @@
 #include <smmintrin.h>
 #include <immintrin.h>
 
+#elif defined(__aarch64__) && !defined(_MSC_VER)
+
+// GSVector is written against SSE intrinsics; sse2neon maps them onto NEON.
+// _M_SSE stays undefined (0), matching the SSE4.1 baseline the Windows build ships.
+#define FAST_UNALIGNED 0
+#include "sse2neon.h"
+
 #elif defined(_M_ARM64)
 #if defined(_MSC_VER) && !defined(__clang__)
 #include <arm64_neon.h>

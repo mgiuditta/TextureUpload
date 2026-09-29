@@ -4,6 +4,7 @@
 #pragma once
 
 #include "common/Assertions.h"
+#include <cstddef>
 
 /// Table for storing swizzling of blocks within a page
 struct alignas(64) GSBlockSwizzleTable

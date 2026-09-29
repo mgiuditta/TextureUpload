@@ -71,6 +71,23 @@ static constexpr unsigned int __pagemask = __pagesize - 1;
 			__builtin_unreachable(); \
 	} while (0)
 
+// MSVC CRT aligned allocation, used throughout GS. Kya's port/include/msvc_compat.h defines the same shim
+// under the same guard, so either header can be included first.
+#ifndef MSVC_COMPAT_ALIGNED_MALLOC
+#define MSVC_COMPAT_ALIGNED_MALLOC
+#include <cstdlib>
+inline void* _aligned_malloc(size_t size, size_t alignment)
+{
+	void* p = nullptr;
+	return posix_memalign(&p, alignment < sizeof(void*) ? sizeof(void*) : alignment, size) == 0 ? p : nullptr;
+}
+
+inline void _aligned_free(void* p)
+{
+	std::free(p);
+}
+#endif
+
 #endif
 
 // --------------------------------------------------------------------------------------

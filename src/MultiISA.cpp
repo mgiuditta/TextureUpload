@@ -2,6 +2,19 @@
 // SPDX-License-Identifier: LGPL-3.0+
 
 #include "MultiISA.h"
+
+#if defined(__aarch64__) || defined(_M_ARM64)
+
+// No x86 CPUID on ARM64: GSVector runs through sse2neon, which only provides the SSE4 baseline.
+static ProcessorFeatures getProcessorFeatures()
+{
+	ProcessorFeatures features = {};
+	features.vectorISA = ProcessorFeatures::VectorISA::SSE4;
+	return features;
+}
+
+#else
+
 #include <xbyak/xbyak_util.h>
 
 #ifdef _WIN32
@@ -75,6 +88,8 @@ static ProcessorFeatures getProcessorFeatures()
 	}
 	return features;
 }
+
+#endif
 
 const ProcessorFeatures g_cpu = getProcessorFeatures();
 

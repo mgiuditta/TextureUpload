@@ -512,6 +512,10 @@ public:
 		return v.blend32(*this, *this == *this);
 	}
 
+#ifndef _MM_MK_INSERTPS_NDX
+#define _MM_MK_INSERTPS_NDX(srcField, dstField, zeroMask) (((srcField) << 6) | ((dstField) << 4) | (zeroMask))
+#endif
+
 	template <int src, int dst>
 	__forceinline GSVector4 insert32(const GSVector4& v) const
 	{
